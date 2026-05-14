@@ -77,7 +77,7 @@ function generateAMPTrials() {
 
 const INSTRUCTIONS = {
     dotProbeImg: `
-        <h2>(一)圖片點偵測作業</h2>
+        <h2>(一)</h2>
         <p>本研究想要了解你做出簡單快速判斷的能力。</p>
         <p>一開始你會在螢幕上看到一個凝視點,然後你會看到兩張圖片同時出現,當圖片消失時,會有一個點出現在其中一張圖片的位置上,當你看到這個點時,請你盡快按下按鍵。</p>
         <p>點出現在左方的圖片位置時,按下A鍵<br>
@@ -95,7 +95,7 @@ const INSTRUCTIONS = {
         </div>`,
     
     dotProbeWord: `
-        <h2>(二)文字點偵測作業</h2>
+        <h2>(二)</h2>
         <p>本研究想要了解你做出簡單快速判斷的能力。</p>
         <p>一開始你會在螢幕上看到一個凝視點,然後你會看到2個詞語同時出現,當詞語消失時,會有一個點出現在其中一個詞語的位置上,當你看到這個點時,請你盡快按下按鍵。</p>
         <p>點出現在左方的詞語位置時,按下A鍵<br>
@@ -113,7 +113,7 @@ const INSTRUCTIONS = {
         </div>`,
     
     amp: `
-        <h2>(三)AMP</h2>
+        <h2>(三)</h2>
         <p>本研究想要了解你做出簡單快速判斷的能力。</p>
         <p>一開始你會在螢幕上看到一個凝視點,之後會出現一張真實生活的圖片作為提醒的訊號,然後會出現一個文字符號。請你注意這個文字符號,針對這個文字符號作出判斷,決定這個文字符號令你感到愉快或不愉快。</p>
         <p style="text-align: center;">愉快就按下M鍵<br>
@@ -187,6 +187,48 @@ const screenInst = document.getElementById('instruction-screen'), contentInst = 
 const screenStim = document.getElementById('stimulus-area'), ampArea = document.getElementById('amp-area'), screenEnd = document.getElementById('end-screen');
 
 const fixation = document.getElementById('fixation'), dot = document.getElementById('dot');
+
+// === 圖片預載邏輯 (Image Preloading) ===
+const allImagesToPreload = [
+    ...deathImg, ...neutralImg,
+    ...ampDeathImg, ...ampNegImg, ...ampPosImg, ...ampNeutralImg,
+    ...hebrewImgs,
+    ...ampPracticeImg, ...hebrewPractice,
+    'photo_point_detection/n13.jpg', 'photo_point_detection/e2.jpg',
+    'photo_point_detection/e3.jpg', 'photo_point_detection/n14.jpg',
+    'photo_point_detection/n15.jpg', 'photo_point_detection/e6.jpg',
+    'photo_point_detection/e9.jpg', 'photo_point_detection/n16.jpg',
+    'photo_point_detection/n17.jpg', 'photo_point_detection/e10.jpg',
+    'photo_point_detection/e11.jpg', 'photo_point_detection/n18.jpg'
+];
+const uniqueImagesToPreload = [...new Set(allImagesToPreload)];
+let imagesLoaded = 0;
+
+// 初始化按鈕狀態
+startBtn.disabled = true;
+startBtn.textContent = '載入中... (0%)';
+startBtn.style.backgroundColor = '#e0e0e0';
+startBtn.style.color = '#666';
+startBtn.style.cursor = 'not-allowed';
+
+uniqueImagesToPreload.forEach(src => {
+    const img = new Image();
+    img.onload = img.onerror = () => {
+        imagesLoaded++;
+        const percent = Math.floor((imagesLoaded / uniqueImagesToPreload.length) * 100);
+        if (imagesLoaded < uniqueImagesToPreload.length) {
+            startBtn.textContent = `載入中... (${percent}%)`;
+        } else {
+            startBtn.textContent = '開始測驗';
+            startBtn.disabled = false;
+            startBtn.style.backgroundColor = '#fff';
+            startBtn.style.color = '#000';
+            startBtn.style.cursor = 'pointer';
+        }
+    };
+    img.src = `images/${src}`;
+});
+// ======================================
 const leftImgStim = document.getElementById('left-img-stimulus'), rightImgStim = document.getElementById('right-img-stimulus');
 const leftWordStim = document.getElementById('left-word-stimulus'), rightWordStim = document.getElementById('right-word-stimulus');
 
