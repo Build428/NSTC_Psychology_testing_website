@@ -1,0 +1,130 @@
+body {
+    background-color: #f0f0f0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+    overflow: hidden;
+}
+
+#experiment-container {
+    width: 900px;
+    height: 600px;
+    position: relative;
+    text-align: center;
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#instruction-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    line-height: 1.8;
+}
+
+#instr-content {
+    max-width: 720px;
+    text-align: left; 
+}
+
+.blink {
+    margin-top: 40px;
+    font-weight: bold;
+    text-align: center;
+    animation: blinker 1.5s linear infinite;
+}
+@keyframes blinker { 50% { opacity: 0; } }
+
+#fixation {
+    font-size: 60px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.stimulus {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%); 
+}
+
+.img-stim {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+}
+#left-img-stimulus  { left: calc(50% - 2.5cm - 125px); }
+#right-img-stimulus { left: calc(50% + 2.5cm + 125px); }
+
+.word-stim {
+    font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    writing-mode: vertical-rl; /* 直式排版 */
+    letter-spacing: 5px;
+}
+#left-word-stimulus  { left: calc(50% - 3.5cm - 12px); }
+#right-word-stimulus { left: calc(50% + 3.5cm + 12px); }
+
+#dot {
+    font-size: 60px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#amp-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#amp-fixation {
+    font-size: 60px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.amp-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+}
+
+#amp-mask {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background-color: #808080;
+    border: 3px solid #555;
+}
+
+#end-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    line-height: 2;
+}

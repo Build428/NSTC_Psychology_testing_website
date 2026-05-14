@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理學實驗：點偵測與AMP作業</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="experiment-container">
+
+        <div id="login-screen" class="screen">
+            <h2>歡迎參與實驗</h2>
+            <p>請輸入您的受試者編號：</p>
+            <p>測驗開始前請先按下鍵盤F11進入全螢幕模式</p>
+            <input type="text" id="subject-id" placeholder="例如：S001"
+                   style="font-size:20px; padding:8px 12px; text-align:center; border:2px solid #aaa; border-radius:4px;">
+            <br><br>
+            <button id="start-btn"
+                    style="font-size:18px; padding:10px 28px; cursor:pointer; border:2px solid #555; border-radius:4px; background:#fff;">
+                開始測驗
+            </button>
+        </div>
+
+        <div id="instruction-screen" class="screen" style="display:none;">
+            <div id="instr-content"></div>
+            <p class="blink">請按空白鍵繼續</p>
+        </div>
+
+        <div id="stimulus-area" class="screen" style="display:none;">
+            <div id="fixation">+</div>
+            
+            <img id="left-img-stimulus"  class="stimulus img-stim" src="" style="display:none;" alt="left">
+            <img id="right-img-stimulus" class="stimulus img-stim" src="" style="display:none;" alt="right">
+            
+            <div id="left-word-stimulus"  class="stimulus word-stim" style="display:none;"></div>
+            <div id="right-word-stimulus" class="stimulus word-stim" style="display:none;"></div>
+
+            <div id="dot" style="display:none;">●</div>
+        </div>
+
+        <div id="amp-area" class="screen" style="display:none;">
+            <div id="amp-fixation" style="display:none;">+</div>
+            <img id="amp-prime"  class="amp-img" src="" style="display:none;" alt="prime">
+            <img id="amp-hebrew" class="amp-img" src="" style="display:none;" alt="hebrew">
+            <div id="amp-mask" style="display:none;"></div>
+        </div>
+
+        <div id="end-screen" class="screen" style="display:none;">
+            <h2>測驗結束，謝謝您的參與！</h2>
+            <p>祝您有個美好的一天！</p>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
