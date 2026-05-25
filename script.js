@@ -132,17 +132,17 @@ const INSTRUCTIONS = {
 };
 
 const practiceImgTrials = [
-    { taskType:'dotprobe-img', leftStim:'photo_point_detection/n13.jpg', rightStim:'photo_point_detection/e2.jpg',  dotPosition:'L', expectedKey:'A',
+    { taskType:'dotprobe-img', leftStim:'photo_point_detection/n13.jpg', rightStim:'photo_point_detection/n14.jpg',  dotPosition:'L', expectedKey:'A',
           isFormal:false },
-    { taskType:'dotprobe-img', leftStim:'photo_point_detection/e3.jpg',  rightStim:'photo_point_detection/n14.jpg', dotPosition:'R', expectedKey:'L',
+    { taskType:'dotprobe-img', leftStim:'photo_point_detection/n15.jpg',  rightStim:'photo_point_detection/n16.jpg', dotPosition:'R', expectedKey:'L',
           isFormal:false },
-    { taskType:'dotprobe-img', leftStim:'photo_point_detection/n15.jpg', rightStim:'photo_point_detection/e6.jpg',  dotPosition:'L', expectedKey:'A',
+    { taskType:'dotprobe-img', leftStim:'photo_point_detection/n17.jpg', rightStim:'photo_point_detection/n18.jpg',  dotPosition:'L', expectedKey:'A',
           isFormal:false },
-    { taskType:'dotprobe-img', leftStim:'photo_point_detection/e9.jpg',  rightStim:'photo_point_detection/n16.jpg', dotPosition:'R', expectedKey:'L',
+    { taskType:'dotprobe-img', leftStim:'photo_point_detection/n14.jpg',  rightStim:'photo_point_detection/n13.jpg', dotPosition:'R', expectedKey:'L',
           isFormal:false },
-    { taskType:'dotprobe-img', leftStim:'photo_point_detection/n17.jpg', rightStim:'photo_point_detection/e10.jpg', dotPosition:'L', expectedKey:'A',
+    { taskType:'dotprobe-img', leftStim:'photo_point_detection/n16.jpg', rightStim:'photo_point_detection/n15.jpg', dotPosition:'L', expectedKey:'A',
           isFormal:false },
-    { taskType:'dotprobe-img', leftStim:'photo_point_detection/e11.jpg', rightStim:'photo_point_detection/n18.jpg', dotPosition:'R', expectedKey:'L',
+    { taskType:'dotprobe-img', leftStim:'photo_point_detection/n18.jpg', rightStim:'photo_point_detection/n17.jpg', dotPosition:'R', expectedKey:'L',
           isFormal:false }
 ];
 
@@ -194,12 +194,9 @@ const allImagesToPreload = [
     ...ampDeathImg, ...ampNegImg, ...ampPosImg, ...ampNeutralImg,
     ...hebrewImgs,
     ...ampPracticeImg, ...hebrewPractice,
-    'photo_point_detection/n13.jpg', 'photo_point_detection/e2.jpg',
-    'photo_point_detection/e3.jpg', 'photo_point_detection/n14.jpg',
-    'photo_point_detection/n15.jpg', 'photo_point_detection/e6.jpg',
-    'photo_point_detection/e9.jpg', 'photo_point_detection/n16.jpg',
-    'photo_point_detection/n17.jpg', 'photo_point_detection/e10.jpg',
-    'photo_point_detection/e11.jpg', 'photo_point_detection/n18.jpg'
+    'photo_point_detection/n13.jpg', 'photo_point_detection/n14.jpg',
+    'photo_point_detection/n15.jpg', 'photo_point_detection/n16.jpg',
+    'photo_point_detection/n17.jpg', 'photo_point_detection/n18.jpg'
 ];
 const uniqueImagesToPreload = [...new Set(allImagesToPreload)];
 let imagesLoaded = 0;
@@ -332,13 +329,18 @@ function runDotTrial(trial) {
 
 function runAMPTrial(trial) {
     ampFixation.style.display = 'block'; ampPrime.style.display = 'none'; ampHebrew.style.display = 'none'; ampMask.style.display = 'none';
+    
+    // 預先指定 src，讓瀏覽器在1000ms的凝視點期間有足夠時間解碼圖片
+    ampPrime.src = `images/${trial.primeImage}`;
+    ampHebrew.src = `images/${trial.hebrewImage}`;
+
     setTimeout(() => {
         ampFixation.style.display = 'none';
-        ampPrime.src = `images/${trial.primeImage}`; ampPrime.style.display = 'block';
+        ampPrime.style.display = 'block';
         setTimeout(() => {
             ampPrime.style.display = 'none';
             setTimeout(() => {
-                ampHebrew.src = `images/${trial.hebrewImage}`; ampHebrew.style.display = 'block';
+                ampHebrew.style.display = 'block';
                 setTimeout(() => {
                     ampHebrew.style.display = 'none';
                     ampMask.style.display = 'block';
@@ -382,7 +384,13 @@ function endExperiment() {
     .then(response => response.json())
     .then(data => {
         if(data.status === 'success') {
-            screenEnd.innerHTML = '<h2>測驗結束，謝謝您的參與！</h2><p>您的資料已成功上傳，請通知實驗者或關閉本網頁。</p>';
+            screenEnd.innerHTML = `
+                <h2>接下來，請你完成三份簡單問卷，全部完成約需10-15分鐘。</h2>
+                <p><button id="finish-q-btn" style="font-size:18px; padding:10px 28px; cursor:pointer; border:2px solid #555; border-radius:4px; background:#fff; margin-top:20px;">問卷已完成</button></p>
+            `;
+            document.getElementById('finish-q-btn').addEventListener('click', () => {
+                screenEnd.innerHTML = '<h2>問卷結束，謝謝您參與</h2><p>您的資料已成功上傳，請通知實驗者或關閉本網頁。</p>';
+            });
         } else {
             screenEnd.innerHTML = `<h2>資料上傳失敗</h2><p>錯誤代碼：${data.message}</p><p>請截圖此畫面並通知實驗者。</p>`;
         }

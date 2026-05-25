@@ -29,8 +29,13 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 24px;
     line-height: 1.8;
+}
+
+#instruction-screen h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
 }
 
 #instr-content {
@@ -71,7 +76,7 @@ body {
 .word-stim {
     font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 36px;
     writing-mode: vertical-rl; /* 直式排版 */
     letter-spacing: 5px;
 }
@@ -79,7 +84,7 @@ body {
 #right-word-stimulus { left: calc(50% + 3.5cm + 12px); }
 
 #dot {
-    font-size: 60px;
+    font-size: 40px;
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
