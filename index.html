@@ -45,6 +45,43 @@
             <img id="amp-hebrew" class="amp-img" src="" style="display:none;" alt="hebrew">
             <div id="amp-mask" style="display:none;"></div>
         </div>
+        <div id="questionnaire-screen" class="screen scrollable" style="display:none;">
+            <div id="q-intro">
+                <h2 style="text-align: center; font-size: 30px;">接下來，請你完成三份簡單問卷，全部完成約需10-15分鐘。</h2>
+                <div style="text-align: center; margin-top: 40px;">
+                    <button id="start-q-btn" style="font-size:20px; padding:12px 32px; cursor:pointer; border:2px solid #555; border-radius:4px; background:#fff;">
+                        開始填寫問卷
+                    </button>
+                </div>
+            </div>
+            
+            <div id="q-dapr-container" class="q-container" style="display:none;">
+                <h2 style="text-align:center;">死亡態度量表 (DAPR)</h2>
+                <p class="q-intro-text">說明：請選擇最符合你想法的選項。<br>本問卷想要了解你的態度，請憑直覺作答，不要想太多。</p>
+                <div id="dapr-questions"></div>
+                <div style="text-align:center; margin-top:30px;">
+                    <button id="next-bhs-btn" class="q-nav-btn">下一頁</button>
+                </div>
+            </div>
+
+            <div id="q-bhs-container" class="q-container" style="display:none;">
+                <h2 style="text-align:center;">貝克絕望感量表 (BHS)</h2>
+                <p class="q-intro-text">說明：這份問卷包含20個句子，請您仔細讀每一個句子，假如它描述你在過去一星期以來（包括今天）的態度，請圈選「是」；假如它不能描述你的態度，請圈選「否」。請小心讀和圈選每個句子。</p>
+                <div id="bhs-questions"></div>
+                <div style="text-align:center; margin-top:30px;">
+                    <button id="next-amhs-btn" class="q-nav-btn">下一頁</button>
+                </div>
+            </div>
+
+            <div id="q-amhs-container" class="q-container" style="display:none;">
+                <h2 style="text-align:center;">成人心理健康量表 (AMHS)</h2>
+                <p class="q-intro-text">作答說明：這份量表目的是要幫助您了解自己的身心健康狀況，問題的回答並無對錯之分，就請按照您這一個月以來（包括今天）的真實狀況誠實填寫作答，愈誠實作答，則結果的正確性愈高，愈能了解自己的身心狀況。共有28題。</p>
+                <div id="amhs-questions"></div>
+                <div style="text-align:center; margin-top:30px;">
+                    <button id="submit-all-btn" class="q-nav-btn submit-btn">完成並上傳資料</button>
+                </div>
+            </div>
+        </div>
 
         <div id="end-screen" class="screen" style="display:none;">
             <h2>測驗結束，謝謝您的參與！</h2>

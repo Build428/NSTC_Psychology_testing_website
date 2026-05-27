@@ -353,27 +353,153 @@ function runAMPTrial(trial) {
 }
 
 function endExperiment() {
+    // 隱藏實驗畫面
     screenStim.style.display = 'none'; 
     ampArea.style.display = 'none'; 
     
-    // 顯示上傳中的畫面，避免受試者提早關閉網頁
+    // 啟動問卷流程
+    startQuestionnaires();
+}
+
+// ==========================================
+// 問卷資料與邏輯處理區
+// ==========================================
+let questionnaireResults = {};
+
+// 1. DAPR 題目資料
+const daprData = [
+    { id: 'Ex1', text: '對於「死亡」，你覺得', options: [{v:1, l:'1非常不愉快'}, {v:2, l:'2'}, {v:3, l:'3'}, {v:4, l:'4'}, {v:5, l:'5'}, {v:6, l:'6'}, {v:7, l:'7非常愉快'}] },
+    { id: 'Ex2', text: '對於「死亡」，你覺得', options: [{v:1, l:'1非常恐懼'}, {v:2, l:'2'}, {v:3, l:'3'}, {v:4, l:'4'}, {v:5, l:'5'}, {v:6, l:'6'}, {v:7, l:'7完全不恐懼'}] },
+    { id: 'Ex3', text: '對於「死亡」，你覺得', options: [{v:1, l:'1非常焦慮'}, {v:2, l:'2'}, {v:3, l:'3'}, {v:4, l:'4'}, {v:5, l:'5'}, {v:6, l:'6'}, {v:7, l:'7完全不焦慮'}] },
+    { id: 'Ex4', text: '你是否有宗教信仰？', options: [{v:1, l:'是'}, {v:2, l:'否'}] },
+    { id: 'Ex5', text: '你是否有在祭拜祖先？', options: [{v:1, l:'是'}, {v:2, l:'否'}] },
+    { id: 'Ex6', text: '你是否相信有靈魂或轉世？', options: [{v:1, l:'是'}, {v:2, l:'否'}] },
+    { id: 'Ba1', text: '你的生理性別是？', options: [{v:1, l:'男'}, {v:2, l:'女'}] },
+    { id: 'Ba2', text: '你的年齡是？', options: [{v:1, l:'18-22'}, {v:2, l:'23-27'}, {v:3, l:'28以上'}] }
+];
+
+const daprItems = [
+    "死亡無疑是一種陰森恐怖的經驗", "想到自己的死亡，我會焦慮不安", "我會盡量可能避免去想到自己的死亡", "我相信自己死後會到天堂/天國/極樂世界去", "死亡將會結束我所有的煩惱", "死亡應該被視為一種自然、無可否認又無法避免的事", "我很困擾於「人一定會死亡」的這個宿命", "我覺得死亡是通往快樂天堂/天國/極樂世界的入口", "死亡可以讓我從這個糟糕的世界逃脫", "一但有死亡的想法進入我的腦海，我會試著將它趕走", "死亡是悲痛與苦難的解脫", "我總是試著讓自己不要想到死亡這件事", "我相信死後的世界會比現世的世界更好", "我覺得死亡是生命中自然的一部分", "我覺得死亡是一種與上蒼(上帝神佛)及永恆至樂的結合", "死亡可以帶來一個全新燦爛的希望", "我並不害怕死亡但也不歡迎它的到來", "我對死亡有強烈的恐懼感", "我完全避免將死亡與自己連結在一起", "我經常困擾於死後是否有來生", "死亡意味著今生一切的結束，這樣的想法讓我感到害怕", "我期望死後可以和我愛的人團聚", "我將死亡視為今生一切痛苦的結束", "死亡只是生命過程的一部分", "我視死亡為一個通往永恆幸福的路徑", "我會盡量避開任何與死亡有關的事物", "我覺得死亡為靈魂提供了最好的解脫", "當我相信死後仍有生命，這是我面對死亡時最寬慰的事", "我視死亡為放下今生重擔的方式", "死亡既不是好事也不是壞事", "我對死後的生命有所期待", "對於死後的不確定性，讓我感到憂心"
+];
+daprItems.forEach((q, i) => {
+    daprData.push({
+        id: `Dap${i+1}`,
+        text: q,
+        options: [{v:5, l:'5非常同意'}, {v:4, l:'4同意'}, {v:3, l:'3普通'}, {v:2, l:'2不同意'}, {v:1, l:'1非常不同意'}]
+    });
+});
+
+// 2. BHS 題目資料
+const bhsItems = [
+    "我抱著希望及熱情期待將來。", "我想放棄算了，因為我沒辦法讓自己更好。", "當事情變糟的時候，我若想到情況不可能永遠如此，我就會好受點。", "我不能想像10年後我會過什麼生活。", "我有足夠的時間去完成我想做的事。", "在將來我期待能順利完成我最關心的事。", "我的將來似乎很灰暗。", "我特別幸運，而我期待在生命中仍會比一般人遇到更多好事。", "我就是碰不到好運，而也沒有理由想我將來能碰到好運。", "我過去的經驗讓我能好好面對將來。", "擺在我的眼前，全都是不愉快的事，一點樂趣也沒有。", "我並不期待會得到我真正想要的。", "當我展望將來，我期待我會比現在快樂。", "事情總是不如我意。", "我對將來有很大的信心。", "我從來不能得到想要的東西，所以想要擁有任何東西是愚蠢的。", "我不可能會在將來得到任何真正的滿足。", "我的將來是一片模糊和不確定。", "我期待將來如意的日子比不如意的多。", "因為我可能不會得到它，所以真正去追求任何東西也沒有用。"
+];
+const bhsData = bhsItems.map((q, i) => ({
+    id: `BH${i+1}`, text: q, options: [{v:1, l:'是'}, {v:2, l:'否'}]
+}));
+
+// 3. AMHS 題目資料
+const amhsItems = [
+    "我最近有頭痛的問題。", "我最近有腸胃的毛病。", "我最近覺得肩膀痠痛僵硬。", "我最近覺得身體非常疲倦。", "我最近的胃口變差。", "我最近睡眠的狀況不好。", "我對許多事感到莫名的擔心。", "我對未來感到煩惱憂慮。", "當我自己獨處時，我會覺得焦慮不安。", "我覺得煩躁不安。", "我擔心不幸的事情會發生。", "我不知道該如何和周遭的人建立關係。", "在人多的地方，和人談話會讓我感到手足無措。", "我害怕和人有太親密的交往。", "在社交場合，我很難主動和他人互動。", "要向別人表達我內心真正感受是件很困難的事。", "我很難了解別人的想法或感受。", "我最近對許多事都感到沒興趣。", "我覺得我活在世上是多餘的。", "我不知道自己為甚麼而活。", "我最近有想死的念頭。", "我覺得這個世界很黑暗。", "我覺得自己是一個很有能力的人。", "我覺得我的生活自在又快樂。", "我覺得很多困難是可以解決的。", "我認為我是一個努力進取的人。", "我能獨自完成許多事。", "每一天的日子都讓我充滿了期待。"
+];
+const amhsData = amhsItems.map((q, i) => ({
+    id: `AMH${i+1}`, text: q, options: [{v:5, l:'總是這樣'}, {v:4, l:'經常這樣'}, {v:3, l:'偶而這樣'}, {v:2, l:'極少這樣'}, {v:1, l:'從未這樣'}]
+}));
+
+// 渲染問卷 HTML
+function renderQuestions(containerId, questions) {
+    const container = document.getElementById(containerId);
+    let html = '';
+    questions.forEach(q => {
+        html += `<div class="question-block">
+                    <div class="q-title">${q.id}. ${q.text}</div>
+                    <div class="q-options">`;
+        q.options.forEach(opt => {
+            html += `<label><input type="radio" name="${q.id}" value="${opt.v}"> ${opt.l}</label>`;
+        });
+        html += `</div></div>`;
+    });
+    container.innerHTML = html;
+}
+
+// 驗證是否全部作答
+function validateForm(questions) {
+    let missing = [];
+    questions.forEach(q => {
+        if (!document.querySelector(`input[name="${q.id}"]:checked`)) {
+            missing.push(q.id);
+        }
+    });
+    if (missing.length > 0) {
+        alert(`請回答所有問題！尚未作答題目：${missing.slice(0, 3).join(', ')} ${missing.length > 3 ? '...' : ''}`);
+        return false;
+    }
+    return true;
+}
+
+// 收集作答資料 (轉換為整數)
+function collectData(questions) {
+    let data = {};
+    questions.forEach(q => {
+        const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+        data[q.id] = selected ? parseInt(selected.value) : null;
+    });
+    return data;
+}
+
+// 控制問卷顯示流程
+function startQuestionnaires() {
+    document.getElementById('questionnaire-screen').style.display = 'block';
+    renderQuestions('dapr-questions', daprData);
+    renderQuestions('bhs-questions', bhsData);
+    renderQuestions('amhs-questions', amhsData);
+}
+
+document.getElementById('start-q-btn').addEventListener('click', () => {
+    document.getElementById('q-intro').style.display = 'none';
+    document.getElementById('q-dapr-container').style.display = 'block';
+});
+
+document.getElementById('next-bhs-btn').addEventListener('click', () => {
+    if (!validateForm(daprData)) return;
+    questionnaireResults.dapr = collectData(daprData);
+    document.getElementById('q-dapr-container').style.display = 'none';
+    document.getElementById('q-bhs-container').style.display = 'block';
+    document.getElementById('questionnaire-screen').scrollTop = 0;
+});
+
+document.getElementById('next-amhs-btn').addEventListener('click', () => {
+    if (!validateForm(bhsData)) return;
+    questionnaireResults.bhs = collectData(bhsData);
+    document.getElementById('q-bhs-container').style.display = 'none';
+    document.getElementById('q-amhs-container').style.display = 'block';
+    document.getElementById('questionnaire-screen').scrollTop = 0;
+});
+
+// 最後提交所有資料
+document.getElementById('submit-all-btn').addEventListener('click', () => {
+    if (!validateForm(amhsData)) return;
+    questionnaireResults.amhs = collectData(amhsData);
+    uploadAllData();
+});
+
+// 負責執行最終的 fetch API
+function uploadAllData() {
+    document.getElementById('questionnaire-screen').style.display = 'none';
     screenEnd.innerHTML = '<h2>資料上傳中，請稍候...</h2>';
     screenEnd.style.display = 'flex';
 
-    // 排序資料
     imgDotResults.sort((a, b) => a.category - b.category);
     wordDotResults.sort((a, b) => a.category - b.category);
     ampResults.sort((a, b) => a.category - b.category);
 
-    // 🛑 在這裡貼上你剛剛部署的 Google Apps Script 網址 🛑
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzmTo9GISjhx2DPIKp58-iRbNro1VHP3drYCtFIG-2GdlnO7yioDY35v6Xx7D9p9-5_/exec';
 
-    // 準備要傳送的資料包
     const payload = {
         subjectId: subjectId,
         imgDotResults: imgDotResults,
         wordDotResults: wordDotResults,
-        ampResults: ampResults
+        ampResults: ampResults,
+        questionnaires: questionnaireResults // 新增的問卷資料
     };
 
     fetch(scriptURL, {
@@ -384,13 +510,8 @@ function endExperiment() {
     .then(response => response.json())
     .then(data => {
         if(data.status === 'success') {
-            screenEnd.innerHTML = `
-                <h2>接下來，請你完成三份簡單問卷，全部完成約需10-15分鐘。</h2>
-                <p><button id="finish-q-btn" style="font-size:18px; padding:10px 28px; cursor:pointer; border:2px solid #555; border-radius:4px; background:#fff; margin-top:20px;">問卷已完成</button></p>
-            `;
-            document.getElementById('finish-q-btn').addEventListener('click', () => {
-                screenEnd.innerHTML = '<h2>問卷結束，謝謝您參與</h2><p>您的資料已成功上傳，請通知實驗者或關閉本網頁。</p>';
-            });
+            // 資料上傳成功後，放回原來的結尾畫面
+            screenEnd.innerHTML = '<h2>問卷結束，謝謝您參與</h2><p>您的資料已成功上傳，請通知實驗者或關閉本網頁。</p>';
         } else {
             screenEnd.innerHTML = `<h2>資料上傳失敗</h2><p>錯誤代碼：${data.message}</p><p>請截圖此畫面並通知實驗者。</p>`;
         }
