@@ -231,10 +231,37 @@ const leftWordStim = document.getElementById('left-word-stimulus'), rightWordSti
 
 const ampFixation = document.getElementById('amp-fixation'), ampPrime = document.getElementById('amp-prime'), ampHebrew = document.getElementById('amp-hebrew'), ampMask = document.getElementById('amp-mask');
 
+const screenConsent = document.getElementById('consent-screen');
+const consentSubmitBtn = document.getElementById('consent-submit-btn');
+
 startBtn.addEventListener('click', () => {
     subjectId = inputId.value.trim();
     if (!subjectId) { alert('請輸入受試者編號！'); return; }
-    screenLogin.style.display = 'none'; showTimelineItem();
+    
+    // 隱藏登入畫面，改為「顯示同意書畫面」
+    screenLogin.style.display = 'none'; 
+    screenConsent.style.display = 'block';
+});
+
+consentSubmitBtn.addEventListener('click', () => {
+    const selected = document.querySelector('input[name="consent"]:checked');
+    
+    if (!selected) {
+        alert("請選擇是否同意參與研究。");
+        return;
+    }
+
+    if (selected.value === 'agree') {
+        screenConsent.style.display = 'none';
+        showTimelineItem(); 
+    } else if (selected.value === 'disagree') {
+        const confirmQuit = confirm("確定不同意?");
+        if (confirmQuit) {
+            screenConsent.style.display = 'none';
+            screenEnd.innerHTML = '<h2>測驗結束</h2><p>您已選擇不同意參與本研究，謝謝您的時間！</p>';
+            screenEnd.style.display = 'flex';
+        }
+    }
 });
 inputId.addEventListener('keydown', (e) => { if (e.key === 'Enter') startBtn.click(); });
 
