@@ -297,22 +297,30 @@ function runDotTrial(trial) {
 
     const isImg = trial.taskType === 'dotprobe-img';
 
+    if (isImg) {
+        leftImgStim.src = `images/${trial.leftStim}`; 
+        rightImgStim.src = `images/${trial.rightStim}`;
+    } else {
+        leftWordStim.textContent = trial.leftStim; 
+        rightWordStim.textContent = trial.rightStim;
+    }
+
     setTimeout(() => {
         fixation.style.display = 'none';
+        
         setTimeout(() => {
             if (isImg) {
-                leftImgStim.src = `images/${trial.leftStim}`; rightImgStim.src = `images/${trial.rightStim}`;
-                leftImgStim.style.display = 'block'; rightImgStim.style.display = 'block';
+                leftImgStim.style.display = 'block'; 
+                rightImgStim.style.display = 'block';
             } else {
-                leftWordStim.textContent = trial.leftStim; rightWordStim.textContent = trial.rightStim;
-                leftWordStim.style.display = 'block'; rightWordStim.style.display = 'block';
+                leftWordStim.style.display = 'block'; 
+                rightWordStim.style.display = 'block';
             }
 
             setTimeout(() => {
                 if (isImg) { leftImgStim.style.display = 'none'; rightImgStim.style.display = 'none'; }
                 else { leftWordStim.style.display = 'none'; rightWordStim.style.display = 'none'; }
 
-                // 精準替換點出現的位置座標
                 if (isImg) {
                     dot.style.left = trial.dotPosition === 'L' ? 'calc(50% - 2.5cm - 125px)' : 'calc(50% + 2.5cm + 125px)';
                 } else {
@@ -330,7 +338,6 @@ function runDotTrial(trial) {
 function runAMPTrial(trial) {
     ampFixation.style.display = 'block'; ampPrime.style.display = 'none'; ampHebrew.style.display = 'none'; ampMask.style.display = 'none';
     
-    // 預先指定 src，讓瀏覽器在1000ms的凝視點期間有足夠時間解碼圖片
     ampPrime.src = `images/${trial.primeImage}`;
     ampHebrew.src = `images/${trial.hebrewImage}`;
 
@@ -353,17 +360,12 @@ function runAMPTrial(trial) {
 }
 
 function endExperiment() {
-    // 隱藏實驗畫面
     screenStim.style.display = 'none'; 
     ampArea.style.display = 'none'; 
-    
-    // 啟動問卷流程
+
     startQuestionnaires();
 }
 
-// ==========================================
-// 問卷資料與邏輯處理區
-// ==========================================
 let questionnaireResults = {};
 
 // 1. DAPR 題目資料
