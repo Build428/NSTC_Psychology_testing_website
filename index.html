@@ -22,6 +22,37 @@
             </button>
         </div>
 
+        <div id="consent-screen" class="screen scrollable" style="display:none;">
+            <div class="q-container">
+                <h2 style="text-align:center;">研究參與者知情同意說明書</h2>
+                <div style="font-size: 16px; line-height: 1.6; text-align: left;">
+                    <p>同學您好：</p>
+                    <p>這是一份由國家科學及技術委員會補助關於生命態度的研究，計畫名稱為「建構死亡態度自動化反應測量並檢驗生命教育模組介入效果—雙階段研究之實徵探討」。主要希望透過本研究了解您對於生死的想法，調查對象為18-30歲的大學生，中文閱讀理解力為中等者。若參加過預備研究者，不適合參與本研究。</p>
+                    <p>您需要線上完成三個實驗與三份問卷，總共約需20分鐘完成全部測驗。</p>
+                    <p>本研究採記名及有可能直接辨識個人的方式作答，電子資料保存至2031年5月即刪除，如有蒐集可辨識個人資訊將編碼，且可辨識個人之資訊會於確認酬金發放名單後立即刪除。研究團隊將盡力維護您的隱私及善盡保密責任，盡量減少可能的風險。作答完畢後，請將測驗結果線上繳回。確認您的測驗完成並繳回後，會提供您100元禮卷或是禮品卡作為酬賞。</p>
+                    <p>本測量採整體分析，您不會被辨識出，研究成果未來可能將發表於研究期刊上，亦無衍生的商業利益。請您自由決定是否填寫，亦可中途不填寫，無需感到壓力，不會因為不參加或退出研究影響將來計畫主持人對您的評價。繳交後，若您想撤回或刪除資料，由於本測驗有記名，3日內可刪除您所填寫的內容，但3日後便會刪除您的姓名資訊，屆時便無法查詢和刪除您填寫的內容。若您決定撤回同意或退出研究，可透過電子郵件聯繫或當面告知進行，若您想詢問本問卷內容，或有興趣得知研究結果，此研究將於2026年12月以後完成，歡迎您依照下述聯絡方式索取研究結果摘要。計畫主持/聯絡人:楊梵妤，fanyu@ntut.edu.tw</p>
+                    <p>本研究依計畫執行，除可預期之不良事件如心理感到不適或抗拒外，若因參與本研究而發生不良事件或損害，將由國立台北科技大學通識中心楊梵妤以適當之經費或提供心理諮詢方式作為補償。除前述之補償原因與方式外，本研究不提供其他形式之補償。您簽署本知情同意書後，在法律上的任何權利不會因此受影響。</p>
+                    <p style="text-align: right;">計畫主持/聯絡人：楊梵妤 敬上<br>email: fanyu@ntut.edu.tw   校內分機：3872</p>
+                    <p>本研究已經過國立臺灣大學行為與社會科學研究倫理委員會審查，審查內容包含利益與風險評估、研究參與者照護及隱私保護等，並已獲得核准。委員會係依規範運作，並通過中央目的事業主管機構查核認證之審查組織。</p>
+                    <p>研究計畫主持人或研究人員已經妥善地向您說明了研究內容與相關資訊，並告知可能影響您參與研究意願的所有資訊。若您有任何疑問，可向研究人員詢問，研究人員亦須具實回答。國立臺灣大學研究參與者保護諮詢電話為：(02)3366-9956、(02)3366-9980。</p>
+                    <p style="font-weight: bold; color: #d9534f;">※本頁視同免簽署的知情同意說明書提供您留存參考</p>
+                </div>
+                
+                <div class="consent-options" style="margin-top: 30px; font-size: 18px; text-align: left; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+                    <label style="display:block; margin-bottom: 15px; cursor: pointer;">
+                        <input type="radio" name="consent" value="agree" style="transform: scale(1.5); margin-right: 15px;"> 本人已經了解研究內容及參與者權益，並同意參與研究。
+                    </label>
+                    <label style="display:block; margin-bottom: 5px; cursor: pointer;">
+                        <input type="radio" name="consent" value="disagree" style="transform: scale(1.5); margin-right: 15px;"> 不同意，離開研究。
+                    </label>
+                </div>
+                
+                <div style="text-align:center; margin-top:30px;">
+                    <button id="consent-submit-btn" class="q-nav-btn">確認</button>
+                </div>
+            </div>
+        </div>
+
         <div id="instruction-screen" class="screen" style="display:none;">
             <div id="instr-content"></div>
             <p class="blink">請按空白鍵繼續</p>
